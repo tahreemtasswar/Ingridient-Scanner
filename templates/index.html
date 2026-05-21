@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ingredient Scanner</title>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+        }
+
+        #reader {
+            width: 300px;
+            margin: auto;
+        }
+
+        .box {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🍎 Ingredient Scanner</h1>
+
+<div id="reader"></div>
+
+<div class="box">
+    <h2>Scanned Code:</h2>
+    <p id="result">None</p>
+</div>
+
+{% if product %}
+
+    <hr>
+
+    <h2>{{ product.name }}</h2>
+
+    {% if product.image %}
+        <img src="{{ product.image }}" width="200">
+    {% endif %}
+
+    <p><b>Ingredients:</b> {{ product.ingredients }}</p>
+    <p><b>Allergens:</b> {{ product.allergens }}</p>
+
+{% endif %}
+
+<script>
+function onScanSuccess(decodedText) {
+    document.getElementById("result").innerText = decodedText;
+
+    // redirect to Flask with code
+    window.location.href = "/?code=" + decodedText;
+}
+
+let scanner = new Html5QrcodeScanner("reader", {
+    fps: 10,
+    qrbox: 250
+});
+
+scanner.render(onScanSuccess);
+</script>
+
+</body>
+</html>
